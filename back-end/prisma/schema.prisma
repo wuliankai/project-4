@@ -27,38 +27,27 @@ model Groups {
   members User[]
 }
 
-model Flights_data {
-id Int @id @default(autoincrement())
-
-
-dest_number flight_to_dest_data @relation(fields: [flight_to_dest_number], references: [flight_number]) //Link to flight_to_dest_data, flight number
-flight_to_dest_number String
-
-home_number flight_to_home_data @relation(fields: [flight_to_home_number], references: [flight_number]) //Link to flight_to_home_data, flight number
-flight_to_home_number String
-}
 
 model flight_to_home_data {
-flight_number String @id
-Flights_data Flights_data[] //Link to flights_data
+id Int @id @default(autoincrement())
+flight_number String
 airport String
-terminal String
-date_time DateTime
+date_time String
 }
 
 model flight_to_dest_data {
-flight_number String @id
-Flights_data Flights_data[] //Link to flights_data
+  id Int @id @default(autoincrement())
+flight_number String
 airport String
-terminal String
-date_time DateTime
+date_time String
 }
 
 model hotel_data {
-  location String @id
+  id Int @id @default(autoincrement())
+  location String
   name String
-  contact_number String
-  room_number String
+  contact_number String?
+  room_number String?
 }
 
 model diary_entries {

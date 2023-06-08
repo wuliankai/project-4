@@ -1,9 +1,11 @@
 const express = require("express");
 const { PrismaClient } = require("@prisma/client");
+const { auth } = require("../middleware/auth");
 
 const prisma = new PrismaClient();
 const router = express.Router();
-const { authenticateToken } = require("../controllers/auth");
+const { auth1 } = require("../controllers/auth");
+
 // Create a new user
 router.post("/users", async (req, res) => {
   try {
@@ -210,61 +212,71 @@ router.get("/exchange_rate", async (req, res) => {
   }
 });
 
-/**
- * flight_number String
- * airport String
-terminal String
-date_time DateTime
- */
-router.post("/flight_data", authenticateToken, async (req, res) => {
+//create new hotel data
+router.post("/hotel_data", async (req, res) => {
   try {
-    console.log("flight_data body=>", req.body);
-    console.log("flight_data user=>", req.user);
-    if (!req.user.is_admin) {
-      res.status(403).json({ message: "Unauthorised to create flight data" });
-    }
-
-    const {
-      home_flight_number,
-      home_airport,
-      home_terminal,
-      home_date_time,
-      dest_flight_number,
-      dest_airport,
-      dest_terminal,
-      dest_date_time,
-    } = req.body;
-
-    const home_data = await prisma.flight_to_home_data.create({
+    const { hotelName, hotelLocation } = req.body;
+    await prisma.hotel_data.create({
       data: {
-        flight_number: home_flight_number,
-        airport: home_airport,
-        terminal: home_terminal,
-        date_time: home_date_time,
+        location: hotelLocation,
+        name: hotelName,
       },
     });
-
-    const dest_data = await prisma.flight_to_dest_data.create({
-      data: {
-        flight_number: dest_flight_number,
-        airport: dest_airport,
-        terminal: dest_terminal,
-        date_time: dest_date_time,
-      },
-    });
-
-    const flight_data = await prisma.Flights_data.create({
-      data: {
-        dest_number: dest_data.flight_number,
-        home_number: home_data.flight_number,
-        group: 1,
-      },
-    });
-    // res.json(user);
-    res.status(200).json({ message: "Create success", created: flight_data });
+    res.json("Hotel data saved!");
   } catch (error) {
-    console.error("Error creating flight data:", error);
-    res.status(500).json({ error: "Unable to create flight data" });
+    console.error("Error creating hotel data", error);
+    res.status(500).json({ error: "Unable to create hotel data" });
+  }
+});
+
+//Get hotel data
+router.get("/hotel_data", async (req, res) => {
+  try {
+    const hotelData = await prisma.hotel_data.findMany({
+      orderBy: {
+        id: "desc",
+      },
+      take: 1,
+    });
+    res.json(hotelData);
+  } catch (error) {
+    console.error("Error getting hotel data", error);
+    res.status(500).json({ error: "Unable to create getting hotel data" });
+  }
+});
+
+//Create new flight to home data
+router.post("/flight_to_home_data", async (req, res) => {
+  try {
+    const { toHomeFlightNumber, toHomeFlightAirport, toHomeFlightDateAndTime } =
+      req.body;
+    await prisma.flight_to_home_data.create({
+      data: {
+        flight_number: toHomeFlightNumber,
+        airport: toHomeFlightAirport,
+        date_time: toHomeFlightDateAndTime,
+      },
+    });
+    res.json("Flight to home saved!");
+  } catch (error) {
+    console.error("Error creating flight to home data", error);
+    res.status(500).json({ error: "Unable to create flight to home data" });
+  }
+});
+
+//Get flight to home data
+router.get("/flight_to_home_data", async (req, res) => {
+  try {
+    const flight_to_home = await prisma.flight_to_home_data.findMany({
+      orderBy: {
+        id: "desc",
+      },
+      take: 1,
+    });
+    res.json(flight_to_home);
+  } catch (error) {
+    console.error("Error getting flight to home data", error);
+    res.status(500).json({ error: "Unable to get flight to home data" });
   }
 });
 

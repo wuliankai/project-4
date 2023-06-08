@@ -1,37 +1,54 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { fetchData } from "../helpers/common";
 
 function ExchangeRateQuickInfo(props) {
-  let baseCurr1 = parseInt(1 * props.exchangeRate);
-  let baseCurr5 = parseInt(5 * props.exchangeRate);
-  let baseCurr10 = parseInt(10 * props.exchangeRate);
-  let baseCurr50 = parseInt(50 * props.exchangeRate);
+  const [exchangeRate, setExchangeRate] = useState(0);
+  const resExchangeRate = async () => {
+    const { ok, data } = await fetchData("/exchange_rate", undefined, "GET");
+    if (ok) {
+      setExchangeRate(data[0].exchange_rate);
+    } else {
+      console.log(data);
+    }
+  };
+
+  useEffect(() => {
+    resExchangeRate();
+  }, []);
+
   return (
     <>
-      <table>
+      <table
+        style={{
+          fontFamily: "'Tsukimi Rounded', sans-serif",
+          color: "white",
+          fontSize: "1.5rem",
+        }}
+      >
         <tbody>
           <tr style={{ color: "white" }}>
             <td>{props.baseCurr}</td>
             <td> 1 </td>
             <td> {props.foreignCurr} </td>
-            <td> {baseCurr1} </td>
+            <td> {1 * exchangeRate} </td>
           </tr>
           <tr style={{ color: "white" }}>
             <td>{props.baseCurr}</td>
             <td> 5 </td>
             <td> {props.foreignCurr} </td>
-            <td> {baseCurr5} </td>
+            <td> {5 * exchangeRate} </td>
           </tr>
           <tr style={{ color: "white" }}>
             <td>{props.baseCurr}</td>
             <td> 10 </td>
             <td> {props.foreignCurr} </td>
-            <td> {baseCurr10} </td>
+            <td> {10 * exchangeRate} </td>
           </tr>
           <tr style={{ color: "white" }}>
             <td>{props.baseCurr}</td>
             <td> 50 </td>
             <td> {props.foreignCurr} </td>
-            <td> {baseCurr50} </td>
+            <td> {50 * exchangeRate} </td>
           </tr>
         </tbody>
       </table>

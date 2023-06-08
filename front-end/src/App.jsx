@@ -9,9 +9,6 @@ function App() {
   const [accessToken, setAccessToken] = useState("");
   const [showLogin, setShowLogin] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
-  useEffect(() => {
-    console.log(accessToken);
-  }, [accessToken]);
 
   return (
     <>
@@ -27,7 +24,7 @@ function App() {
         >
           Troupe
         </h1>
-        {accessToken.length > 0 && <MainDisplay />}
+        {accessToken.length > 0 && { isAdmin: false } && <MainDisplay />}
         {accessToken.length === 0 && showLogin && (
           <LogIn setShowLogin={setShowLogin} />
         )}
