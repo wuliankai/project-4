@@ -17,6 +17,7 @@ model User {
   groups Groups[]
   groups_created Groups[] @relation("creator") // can't make optional lists; need to pass in empty data if user has not created any groups.
   is_admin Boolean @default(false)
+  diaries diary_entries[]
 }
 
 
@@ -53,6 +54,8 @@ model hotel_data {
 model diary_entries {
   id Int @id @default(autoincrement())
   entry String
+  user   User @relation(fields: [userPhone], references: [phone_number])
+  userPhone Int
 }
 
 model roles {

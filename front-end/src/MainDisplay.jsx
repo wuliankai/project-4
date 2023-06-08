@@ -6,46 +6,46 @@ import FlightsQuickInfo from "./FlightsQuickInfo/FlightsQuickInfo";
 import UserContext from "./context/user";
 
 function MainDisplay() {
-  const [baseCurrAmt, setBaseCurrAmt] = useState("2500");
-  const [foreignCurrAmt, setForeignCurrAmt] = useState("64000");
-  const [baseCurr, setBaseCurr] = useState("SGD");
-  const [foreignCurr, setForeignCurr] = useState("THB");
-  const [exchangeRate, setExchangeRate] = useState(0);
+  // const [baseCurrAmt, setBaseCurrAmt] = useState("2500");
+  // const [foreignCurrAmt, setForeignCurrAmt] = useState("64000");
+  // const [baseCurr, setBaseCurr] = useState("SGD");
+  // const [foreignCurr, setForeignCurr] = useState("THB");
+  // const [exchangeRate, setExchangeRate] = useState(0);
   const userCtx = useContext(UserContext);
 
-  const computeExchangeRate = async () => {
-    // setExchangeRate(parseInt(foreignCurrAmt) / parseInt(baseCurrAmt));
-    const calExchangeRate = parseInt(foreignCurrAmt) / parseInt(baseCurrAmt);
+  // const computeExchangeRate = async () => {
+  //   // setExchangeRate(parseInt(foreignCurrAmt) / parseInt(baseCurrAmt));
+  //   const calExchangeRate = parseInt(foreignCurrAmt) / parseInt(baseCurrAmt);
 
-    const { ok, data } = await fetchData("/exchange_rate", undefined, "POST", {
-      exchange_rate: calExchangeRate,
-    });
-    if (ok) {
-      setExchangeRate(calExchangeRate);
-      console.log("Exchange rate saved!");
-    } else {
-      console.log(data);
-    }
-  };
+  //   const { ok, data } = await fetchData("/exchange_rate", undefined, "POST", {
+  //     exchange_rate: calExchangeRate,
+  //   });
+  //   if (ok) {
+  //     setExchangeRate(calExchangeRate);
+  //     console.log("Exchange rate saved!");
+  //   } else {
+  //     console.log(data);
+  //   }
+  // };
 
-  const getExchangeRate = async () => {
-    const { ok, data } = await fetchData("/exchange_rate", undefined, "GET");
-    if (ok) {
-      setExchangeRate(data[0].exchange_rate);
-      console.log("Exchange rate displayed!");
-    } else {
-      console.log(data);
-    }
-  };
+  // const getExchangeRate = async () => {
+  //   const { ok, data } = await fetchData("/exchange_rate", undefined, "GET");
+  //   if (ok) {
+  //     setExchangeRate(data[0].exchange_rate);
+  //     console.log("Exchange rate displayed!");
+  //   } else {
+  //     console.log(data);
+  //   }
+  // };
 
   useEffect(() => {
-    computeExchangeRate();
-    getExchangeRate();
+    // computeExchangeRate();
+    // getExchangeRate();
   }, []);
 
   return (
     <>
-      <input
+      {/* <input
         placeholder="base currency"
         style={{ width: "7rem", height: "2rem" }} //this chunk sets the base curr sign (sgd, etc)
         value={baseCurr}
@@ -82,12 +82,13 @@ function MainDisplay() {
         onClick={computeExchangeRate}
       >
         Compute Exchange Rate
-      </button>
-      <ExchangeRateQuickInfo
+      </button> */}
+      <ExchangeRateQuickInfo></ExchangeRateQuickInfo>
+      {/* <ExchangeRateQuickInfo
         exchangeRate={exchangeRate}
         baseCurr={baseCurr}
         foreignCurr={foreignCurr}
-      ></ExchangeRateQuickInfo>
+      ></ExchangeRateQuickInfo> */}
       <HotelQuickInfo></HotelQuickInfo>
       <FlightsQuickInfo></FlightsQuickInfo>
     </>
