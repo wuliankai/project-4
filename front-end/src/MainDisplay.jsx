@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { fetchData } from "./helpers/common";
 import ExchangeRateQuickInfo from "./ExchangeRateQuickInfo/ExchangeRateQuickInfo";
 import HotelQuickInfo from "./HotelQuickInfo/HotelQuickInfo";
@@ -22,10 +22,26 @@ function MainDisplay() {
     });
     if (ok) {
       setExchangeRate(calExchangeRate);
+      console.log("Exchange rate saved!");
     } else {
       console.log(data);
     }
   };
+
+  const getExchangeRate = async () => {
+    const { ok, data } = await fetchData("/exchange_rate", undefined, "GET");
+    if (ok) {
+      setExchangeRate(data[0].exchange_rate);
+      console.log("Exchange rate displayed!");
+    } else {
+      console.log(data);
+    }
+  };
+
+  useEffect(() => {
+    computeExchangeRate();
+    getExchangeRate();
+  }, []);
 
   return (
     <>
@@ -70,7 +86,7 @@ function MainDisplay() {
       <ExchangeRateQuickInfo
         exchangeRate={exchangeRate}
         baseCurr={baseCurr}
-        foreignCurr={foreignCurr} //Exchange Rate Quick Info.
+        foreignCurr={foreignCurr}
       ></ExchangeRateQuickInfo>
       <HotelQuickInfo></HotelQuickInfo>
       <FlightsQuickInfo></FlightsQuickInfo>

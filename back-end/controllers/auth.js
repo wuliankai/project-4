@@ -65,28 +65,28 @@ const login = async (req, res) => {
   }
 };
 
-const authenticateToken = (req, res, next) => {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
+// const authenticateToken = (req, res, next) => {
+//   const authHeader = req.headers["authorization"];
+//   const token = authHeader && authHeader.split(" ")[1];
 
-  if (token == null) return res.sendStatus(401);
+//   if (token == null) return res.sendStatus(401);
 
-  jwt.verify(token, process.env.ACCESS_SECRET, (err, user) => {
-    console.log(err);
+//   jwt.verify(token, process.env.ACCESS_SECRET, (err, user) => {
+//     console.log(err);
 
-    if (err) {
-      // unauthorize user
-      return res.sendStatus(401);
-    }
-    console.log(user);
-    req.user = user;
+//     if (err) {
+//       // unauthorize user
+//       return res.sendStatus(401);
+//     }
+//     console.log(user);
+//     req.user = user;
 
-    next();
-  });
-};
+//     next();
+//   });
+// };
 
 module.exports = {
   // register,
-  authenticateToken,
+  // authenticateToken,
   login,
 };

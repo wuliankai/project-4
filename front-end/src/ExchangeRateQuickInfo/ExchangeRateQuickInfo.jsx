@@ -1,20 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { fetchData } from "../helpers/common";
 
 function ExchangeRateQuickInfo(props) {
-  const [exchangeRate, setExchangeRate] = useState(0);
-  const resExchangeRate = async () => {
-    const { ok, data } = await fetchData("/exchange_rate", undefined, "GET");
-    if (ok) {
-      setExchangeRate(data[0].exchange_rate);
-    } else {
-      console.log(data);
-    }
-  };
+  // const resExchangeRate = async () => {
+  //   const { ok, data } = await fetchData("/exchange_rate", undefined, "GET");
+  //   if (ok) {
+  //     setExchangeRate(data[0].exchange_rate);
+  //     console.log("Exchange rate displayed!");
+  //   } else {
+  //     console.log(data);
+  //   }
+  // };
 
-  useEffect(() => {
-    resExchangeRate();
-  }, []);
+  // useEffect(() => {
+  //   resExchangeRate();
+  //   props.computeExchangeRate();
+  // }, []);
 
   return (
     <>
@@ -30,25 +31,25 @@ function ExchangeRateQuickInfo(props) {
             <td>{props.baseCurr}</td>
             <td> 1 </td>
             <td> {props.foreignCurr} </td>
-            <td> {1 * exchangeRate} </td>
+            <td> {1 * props.exchangeRate} </td>
           </tr>
           <tr style={{ color: "white" }}>
             <td>{props.baseCurr}</td>
             <td> 5 </td>
             <td> {props.foreignCurr} </td>
-            <td> {5 * exchangeRate} </td>
+            <td> {5 * props.exchangeRate} </td>
           </tr>
           <tr style={{ color: "white" }}>
             <td>{props.baseCurr}</td>
             <td> 10 </td>
             <td> {props.foreignCurr} </td>
-            <td> {10 * exchangeRate} </td>
+            <td> {10 * props.exchangeRate} </td>
           </tr>
           <tr style={{ color: "white" }}>
             <td>{props.baseCurr}</td>
             <td> 50 </td>
             <td> {props.foreignCurr} </td>
-            <td> {50 * exchangeRate} </td>
+            <td> {50 * props.exchangeRate} </td>
           </tr>
         </tbody>
       </table>

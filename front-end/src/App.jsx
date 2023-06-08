@@ -3,6 +3,7 @@ import "./App.css";
 import LogIn from "./LogIn";
 import Register from "./Register";
 import MainDisplay from "./MainDisplay";
+import AdminView from "./AdminView/AdminView";
 import UserContext from "./context/user";
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
 
   return (
     <>
+      {/* Set Show Log In */}
       <UserContext.Provider
         value={{ accessToken, setAccessToken, isAdmin, setIsAdmin }}
       >
@@ -24,10 +26,12 @@ function App() {
         >
           Troupe
         </h1>
-        {accessToken.length > 0 && { isAdmin: false } && <MainDisplay />}
+        {accessToken.length > 0 && isAdmin && <AdminView />}
+        {accessToken.length > 0 && !isAdmin && <MainDisplay />}
         {accessToken.length === 0 && showLogin && (
           <LogIn setShowLogin={setShowLogin} />
         )}
+        5
       </UserContext.Provider>
 
       <br />
@@ -35,6 +39,7 @@ function App() {
       <br />
 
       <br />
+      {/* Set Show Register */}
       <UserContext.Provider
         value={{ accessToken, setAccessToken, isAdmin, setIsAdmin }}
       >

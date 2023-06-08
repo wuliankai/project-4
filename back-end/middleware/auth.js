@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 
-const auth1 = (req, res, next) => {
+const auth = (req, res, next) => {
   if (!("authorization" in req.headers)) {
     return res.status(400).json({ status: "error", msg: "not token found" });
   }
@@ -15,7 +15,7 @@ const auth1 = (req, res, next) => {
     } catch (error) {
       return res.status(401).json({
         status: "error",
-        msg: "unauthorised",
+        msg: "not authorised",
       });
     }
   } else {
@@ -51,4 +51,4 @@ const auth1 = (req, res, next) => {
 //   }
 // };
 
-module.exports = { auth1 };
+module.exports = { auth };

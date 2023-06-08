@@ -1,16 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { fetchData } from "../helpers/common";
+import UserContext from "../context/user";
 
 function HotelQuickInfo() {
+  const userCtx = useContext(UserContext);
   const [hotelName, setHotelName] = useState("Four Seasons Hotel Bangkok");
   const [hotelLocation, setHotelLocation] = useState(
     "300 Charoen Krung Road, Sathorn, Bangkok Riverside, Bangkok, Thailand, 10120"
   );
+
   const handleHotelInfo = async () => {
-    const { ok, data } = await fetchData("/hotel_data", undefined, "POST", {
-      hotelName,
-      hotelLocation,
-    });
+    const { ok, data } = await fetchData(
+      "/hotel_data",
+      userCtx.accessToken,
+      "POST",
+      {
+        hotelName,
+        hotelLocation,
+      }
+    );
     if (ok) {
       console.log(data);
       console.log("Hotel data saved!");
@@ -20,7 +28,11 @@ function HotelQuickInfo() {
   };
 
   const getHotelInfo = async () => {
-    const { ok, data } = await fetchData("/hotel_data", undefined, "GET");
+    const { ok, data } = await fetchData(
+      "/hotel_data",
+      userCtx.accessToken,
+      "GET"
+    );
     if (ok) {
       setHotelName(data[0].name);
       setHotelLocation(data[0].location);

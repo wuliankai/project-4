@@ -4,7 +4,6 @@ const { auth } = require("../middleware/auth");
 
 const prisma = new PrismaClient();
 const router = express.Router();
-const { auth1 } = require("../controllers/auth");
 
 // Create a new user
 router.post("/users", async (req, res) => {
@@ -213,7 +212,7 @@ router.get("/exchange_rate", async (req, res) => {
 });
 
 //create new hotel data
-router.post("/hotel_data", async (req, res) => {
+router.post("/hotel_data", auth, async (req, res) => {
   try {
     const { hotelName, hotelLocation } = req.body;
     await prisma.hotel_data.create({
@@ -230,7 +229,7 @@ router.post("/hotel_data", async (req, res) => {
 });
 
 //Get hotel data
-router.get("/hotel_data", async (req, res) => {
+router.get("/hotel_data", auth, async (req, res) => {
   try {
     const hotelData = await prisma.hotel_data.findMany({
       orderBy: {
@@ -279,5 +278,9 @@ router.get("/flight_to_home_data", async (req, res) => {
     res.status(500).json({ error: "Unable to get flight to home data" });
   }
 });
+
+//Create new flight to dest data
+
+//Get flight to dest data
 
 module.exports = router;
