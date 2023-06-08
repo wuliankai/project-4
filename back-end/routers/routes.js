@@ -280,7 +280,124 @@ router.get("/flight_to_home_data", async (req, res) => {
 });
 
 //Create new flight to dest data
+router.post("/flight_to_dest_data", async (req, res) => {
+  try {
+    const { toDestFlightNumber, toDestFlightAirport, toDestFlightDateAndTime } =
+      req.body;
+    await prisma.flight_to_home_data.create({
+      data: {
+        flight_number: toDestFlightNumber,
+        airport: toDestFlightAirport,
+        date_time: toDestFlightDateAndTime,
+      },
+    });
+    res.json("Flight to destination saved!");
+  } catch (error) {
+    console.error("Error creating flight to destination data", error);
+    res
+      .status(500)
+      .json({ error: "Unable to create flight to destination data" });
+  }
+});
 
 //Get flight to dest data
+router.get("/flight_to_dest_data", async (req, res) => {
+  try {
+    const flight_to_home = await prisma.flight_to_dest_data.findMany({
+      orderBy: {
+        id: "desc",
+      },
+      take: 1,
+    });
+    res.json(flight_to_home);
+  } catch (error) {
+    console.error("Error getting flight to destination data", error);
+    res.status(500).json({ error: "Unable to get flight to destination data" });
+  }
+});
+
+router.get("/entries", auth, async (req, res) => {
+  try {
+    const { phone_number } = req.decoded;
+    const entries = await prisma.diary_entries.findMany({
+      where: {
+        userPhone: parseInt(phone_number),
+      },
+    });
+    res.json(entries);
+  } catch (error) {
+    console.error("Error to fetch your diaries", error);
+    res.status(500).json({ error: "Unable to fetch your diaries" });
+  }
+});
+
+router.put("/entries/:id", auth, async (req, res) => {
+  try {
+    const { phone_number } = req.decoded;
+    const { id } = req.params;
+    const { entryData } = req.body;
+    const updatedEntry = await prisma.diary_entries.updateMany({
+      where: {
+        id: parseInt(id),
+        userPhone: parseInt(phone_number),
+      },
+      data: {
+        entry: entryData,
+      },
+    });
+    if (updatedEntry.count === 0) {
+      res
+        .status(400)
+        .json({ error: "Unable to update entry, unauthorised user!" });
+    } else {
+      res.json("Update your entry successfully!");
+    }
+  } catch (error) {
+    console.error("Error updating entry:", error);
+    res.status(500).json({ error: "Unable to update entry" });
+  }
+});
+
+router.delete("/entries/:id", auth, async (req, res) => {
+  try {
+    const { phone_number } = req.decoded;
+    const { id } = req.params;
+    deletedEntry = await prisma.diary_entries.deleteMany({
+      where: {
+        id: parseInt(id),
+        userPhone: parseInt(phone_number),
+      },
+    });
+
+    if (deletedEntry.count === 0) {
+      res
+        .status(400)
+        .json({ error: "Unable to delete entry, unauthorised user!" });
+    } else {
+      res.json("Delete your entry successfully!");
+    }
+  } catch (error) {
+    console.error("Error deleting Entry:", error);
+    res.status(500).json({ error: "Unable to delete Entry" });
+  }
+});
+
+router.post("/entries", auth, async (req, res) => {
+  try {
+    console.log(req.decoded);
+    const { phone_number } = req.decoded;
+    const { entryData } = req.body;
+    await prisma.diary_entries.create({
+      data: {
+        entry: entryData,
+        userPhone: phone_number,
+      },
+    });
+    res.json("Entry added!");
+  } catch (error) {
+    console.error("Error adding diary entry", error);
+    res.status(500).json({ error: "Unable to add diary entry" });
+  }
+});
 
 module.exports = router;

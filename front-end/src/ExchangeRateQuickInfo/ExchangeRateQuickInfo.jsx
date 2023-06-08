@@ -116,6 +116,7 @@ function ExchangeRateQuickInfo() {
           </tr>
         </tbody>
       </table>
+      <hr />
     </>
   );
 }
