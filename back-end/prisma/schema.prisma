@@ -1,0 +1,78 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id Int @unique @default(autoincrement())
+  name String
+  phone_number Int @id
+  groups Groups[]
+  groups_created Groups[] @relation("creator") // can't make optional lists; need to pass in empty data if user has not created any groups.
+  is_admin Boolean @default(false)
+}
+
+
+model Groups {
+  group_id Int @id @default(autoincrement())
+  group_creator User @relation("creator", fields: [creator_id], references:[phone_number])
+  creator_id Int
+  members User[]
+}
+
+model Flights_data {
+id Int @id @default(autoincrement())
+
+
+dest_number flight_to_dest_data @relation(fields: [flight_to_dest_number], references: [flight_number]) //Link to flight_to_dest_data, flight number
+flight_to_dest_number String
+
+home_number flight_to_home_data @relation(fields: [flight_to_home_number], references: [flight_number]) //Link to flight_to_home_data, flight number
+flight_to_home_number String
+}
+
+model flight_to_home_data {
+flight_number String @id
+Flights_data Flights_data[] //Link to flights_data
+airport String
+terminal String
+date_time DateTime
+}
+
+model flight_to_dest_data {
+flight_number String @id
+Flights_data Flights_data[] //Link to flights_data
+airport String
+terminal String
+date_time DateTime
+}
+
+model hotel_data {
+  location String @id
+  name String
+  contact_number String
+  room_number String
+}
+
+model diary_entries {
+  id Int @id @default(autoincrement())
+  entry String
+}
+
+model roles {
+  id Int @id @default(autoincrement())
+  admin Boolean
+  user Boolean
+}
+
+model exchange_rate {
+  id Int @id @default(autoincrement())
+  exchange_rate Float
+}
