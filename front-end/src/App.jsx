@@ -31,7 +31,6 @@ function App() {
         {accessToken.length === 0 && showLogin && (
           <LogIn setShowLogin={setShowLogin} />
         )}
-        5
       </UserContext.Provider>
 
       <br />

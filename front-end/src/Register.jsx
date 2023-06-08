@@ -6,7 +6,7 @@ function Register() {
   const [phoneNumber, setPhoneNumber] = useState("");
 
   const registerUser = async () => {
-    const { ok, data } = await fetchData("/user", undefined, "POST", {
+    const { ok, data } = await fetchData("/users", undefined, "POST", {
       name,
       phoneNumber,
     });
