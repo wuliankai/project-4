@@ -316,6 +316,7 @@ router.get("/flight_to_dest_data", async (req, res) => {
   }
 });
 
+//Get diary entries
 router.get("/entries", auth, async (req, res) => {
   try {
     const { phone_number } = req.decoded;
@@ -331,9 +332,11 @@ router.get("/entries", auth, async (req, res) => {
   }
 });
 
+//Update diary entries **NEED TO USE FIND MANY**
 router.put("/entries/:id", auth, async (req, res) => {
   try {
-    const { phone_number } = req.decoded;
+    // const { phone_number } = req.decoded;
+    const phone_number = req.decoded.phone_number;
     const { id } = req.params;
     const { entryData } = req.body;
     const updatedEntry = await prisma.diary_entries.updateMany({
@@ -358,6 +361,7 @@ router.put("/entries/:id", auth, async (req, res) => {
   }
 });
 
+//Delete diary entry **NEED TO USE FIND MANY**
 router.delete("/entries/:id", auth, async (req, res) => {
   try {
     const { phone_number } = req.decoded;
@@ -382,6 +386,7 @@ router.delete("/entries/:id", auth, async (req, res) => {
   }
 });
 
+//Create diary entry
 router.post("/entries", auth, async (req, res) => {
   try {
     console.log(req.decoded);
